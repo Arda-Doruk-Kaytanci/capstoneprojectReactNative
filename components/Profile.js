@@ -7,20 +7,23 @@ import {
   Pressable,
   StyleSheet,
 } from "react-native";
-import { clearStorage, getItem, setStorage } from "../tools"; 
+import { clearStorage, getItem, setStorage } from "../tools";
 import { styles } from "./Onboarding";
 
 export default function Profile({ navigation }) {
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [phone, setPhone] = React.useState("");
   const [changeMode, setChangeMode] = React.useState(false);
 
   useEffect(() => {
     async function fetchUserData() {
       const storedUsername = await getItem("username");
       const storedEmail = await getItem("email");
+      const storedPhone = await getItem("phone");
       setUsername(storedUsername || "");
       setEmail(storedEmail || "");
+      setPhone(storedPhone || "");
     }
     fetchUserData();
   }, []);
@@ -41,7 +44,12 @@ export default function Profile({ navigation }) {
       </Pressable>
 
       <Image
-        style={{ height: 100, width: 100, borderRadius: 50, marginVertical: 20 }}
+        style={{
+          height: 100,
+          width: 100,
+          borderRadius: 50,
+          marginVertical: 20,
+        }}
         resizeMode="stretch"
         source={require("../img/littlelemon.png")}
       />
@@ -61,12 +69,20 @@ export default function Profile({ navigation }) {
             placeholder="Email"
             keyboardType="email-address"
           />
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => setPhone(text)}
+            value={phone}
+            placeholder="Phone Number"
+            keyboardType="phone-pad"
+          />
           <Pressable
             style={styles.button}
             onPress={() => {
               setStorage("email", email);
               setStorage("username", username);
-              setChangeMode(false); 
+              setStorage("phone", phone);
+              setChangeMode(false);
             }}
           >
             <Text style={{ color: "white" }}>Save Changes</Text>
@@ -76,7 +92,8 @@ export default function Profile({ navigation }) {
             onPress={() => {
               setEmail("");
               setUsername("");
-              setChangeMode(false); 
+              setPhone("");
+              setChangeMode(false);
             }}
           >
             <Text style={{ color: "white" }}>Discard Changes</Text>
@@ -84,8 +101,9 @@ export default function Profile({ navigation }) {
         </>
       ) : (
         <>
-          <Text style={{ marginBottom: 10 }}>Username: {username}</Text>
-          <Text style={{ marginBottom: 10 }}>Email: {email}</Text>
+          <Text>Username: {username}</Text>
+          <Text>Email: {email}</Text>
+          <Text>Phone: {phone}</Text>
         </>
       )}
 

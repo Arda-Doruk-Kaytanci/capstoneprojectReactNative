@@ -8,7 +8,6 @@ import { Image, Pressable } from "react-native";
 import Profile from "./components/Profile";
 import { useEffect } from "react";
 
-
 export default function App() {
   const Stack = createStackNavigator();
 
@@ -32,6 +31,15 @@ export default function App() {
         initialRouteName={hasLoggedIn ? "Homepage" : "Onboarding"}
         screenOptions={{
           headerTitleAlign: "center",
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack();
+              }}
+            >
+              <Text>Go Back</Text>
+            </Pressable>
+          ),
         }}
       >
         <Stack.Screen
